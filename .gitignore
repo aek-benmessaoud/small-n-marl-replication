@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Experiment data / artifacts (THE BUILDING)
+results/
+logs/
+
+# Checkpoints and weights
+*.pt
+*.pth
+*.ckpt
+
+# TensorBoard
+runs/
+tensorboard/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Notebooks scratch
+.ipynb_checkpoints/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Editors
+.vscode/
+.idea/

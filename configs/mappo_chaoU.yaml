@@ -1,0 +1,61 @@
+# Project09 MAPPO + Chao-U intrinsic reward — default campaign config.
+# Consumed by the training/evaluation scripts (phase 5+) and written verbatim
+# into each run's config.json.
+
+experiment: mappo_chaoU
+phase: 5
+
+# Regime (see README): MATE-4v2-9-v0 | MATE-4v8-9-v0 (default) | MATE-8v8-9-v0
+regime: MATE-4v8-9-v0
+reward_type: dense
+
+# Experiment rigor
+num_runs: 30
+base_seed: 0
+seed_stride: 1000
+max_steps: 1000
+
+# Angular localization model (transposed from Project08)
+ang_tol_deg: 15.0
+cluster_cap: 8
+
+# Chao-U locked configuration
+chao_variant: bias_cap
+adaptive_k: 0.5
+
+# Reward shaping
+reward_lambda: 0.5
+reward_coverage_coeff: 1.0
+
+# CRLB oracle (evaluation-only)
+quality_sigma_bearing_deg: 1.0
+quality_threshold: 100.0
+quality_sample_k: 25
+quality_target: 0.9
+
+# MAPPO hyperparameters
+mappo:
+  hidden: [512, 256]
+  lr: 5.0e-4
+  gamma: 0.99
+  lam: 0.95
+  clip: 0.2
+  epochs: 10
+  minibatch: 128
+  entropy_coef: 0.0
+  value_coef: 0.5
+  frame_skip: 5
+  horizon: 500
+  max_total_steps: 2000000
+  checkpoint_interval: 1000
+  eval_every: 10000
+
+# Baselines (phase 4)
+baselines:
+  - random
+  - greedy_tracking
+  - memory_tracking
+  - chao_u_aware
+
+# Analysis
+wilcoxon_alpha: 0.05

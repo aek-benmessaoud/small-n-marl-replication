@@ -1,0 +1,30 @@
+[
+  {
+    "seed": 32,
+    "tag": "random",
+    "seq_loc_k8": 0.02305,
+    "seq_loc_k6": 0.020625,
+    "seq_loc_k4": 0.00705
+  },
+  {
+    "seed": 33,
+    "tag": "random",
+    "seq_loc_k8": 0.016775,
+    "seq_loc_k6": 0.006975,
+    "seq_loc_k4": 0.004025
+  },
+  {
+    "seed": 34,
+    "tag": "random",
+    "seq_loc_k8": 0.0363,
+    "seq_loc_k6": 0.023825,
+    "seq_loc_k4": 0.003575
+  },
+  {
+    "seed": 35,
+    "tag": "random",
+    "seq_loc_k8": 0.0401,
+    "seq_loc_k6": 0.0284,
+    "seq_loc_k4": 0.0033
+  }
+]

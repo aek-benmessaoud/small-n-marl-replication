@@ -16,7 +16,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(__file__)
+while not os.path.isdir(os.path.join(ROOT, "results")) and os.path.dirname(ROOT) != ROOT:
+    ROOT = os.path.dirname(ROOT)
 RES = os.path.join(ROOT, "results")
 FIG = os.path.join(ROOT, "paper", "figures")
 
@@ -105,7 +107,7 @@ def fig1(out="fig1_forest.pdf"):
         ax.set_yticklabels([str(s) for s in ss], fontsize=6.5)
         ax.invert_yaxis()
         ax.set_ylim(-2.3, len(ss) - 0.5)
-        ax.set_xlabel("Î” seq\\_loc  (treat $-$ ctrl)")
+        ax.set_xlabel("\u0394 seq\\_loc  (treat $-$ ctrl)")
         ax.set_title(title, fontsize=10)
         ax.grid(axis="x", alpha=0.3)
     fig.suptitle("Per-seed paired seq\\_loc deltas, treatment vs. shared no-intrinsic control",
@@ -120,8 +122,8 @@ def fig1(out="fig1_forest.pdf"):
 # FIG 2 - lambda sweep
 # ----------------------------------------------------------------------------
 def fig2(out="fig2_lambda.pdf"):
-    ratios = [("chao8v8_l0_5", "Î»/2", 0.5), ("chao8v8_l1_0", "Î»Ã—1", 1.0),
-              ("chao8v8_l2_0", "Î»Ã—2", 2.0)]
+    ratios = [("chao8v8_l0_5", "\u03bb/2", 0.5), ("chao8v8_l1_0", "\u03bb\u00d71", 1.0),
+              ("chao8v8_l2_0", "\u03bb\u00d72", 2.0)]
     xs, cs, us = [], [], []
     for tag, lab, r in ratios:
         ui, ci, _ = agg_arm(tag, "intrinsic", range(4))
@@ -130,18 +132,18 @@ def fig2(out="fig2_lambda.pdf"):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 3.4))
     ax1.plot(xs, cs, "o-", color="#1f77b4", lw=1.6, ms=6)
     ax1.axhline(0, color="#888", ls="--", lw=0.8)
-    ax1.set_xlabel("reward scaling Î» (auto-calibrated = Ã—1)")
-    ax1.set_ylabel("Î”C$_{end}$  (intr $-$ ctrl)")
+    ax1.set_xlabel("reward scaling \u03bb (auto-calibrated = \u00d71)")
+    ax1.set_ylabel("\u0394C$_{end}$  (intr $-$ ctrl)")
     ax1.set_xticks(xs)
-    ax1.set_xticklabels(["Î»/2", "Î»Ã—1", "Î»Ã—2"])
+    ax1.set_xticklabels(["\u03bb/2", "\u03bb\u00d71", "\u03bb\u00d72"])
     ax1.set_title("Configuration diversity", fontsize=10)
     ax1.grid(alpha=0.3)
     ax2.plot(xs, us, "o-", color="#d62728", lw=1.6, ms=6)
     ax2.axhline(0, color="#888", ls="--", lw=0.8)
-    ax2.set_xlabel("reward scaling Î» (auto-calibrated = Ã—1)")
-    ax2.set_ylabel("Î”U$_{end}$  (intr $-$ ctrl)")
+    ax2.set_xlabel("reward scaling \u03bb (auto-calibrated = \u00d71)")
+    ax2.set_ylabel("\u0394U$_{end}$  (intr $-$ ctrl)")
     ax2.set_xticks(xs)
-    ax2.set_xticklabels(["Î»/2", "Î»Ã—1", "Î»Ã—2"])
+    ax2.set_xticklabels(["\u03bb/2", "\u03bb\u00d71", "\u03bb\u00d72"])
     ax2.set_title("Remaining work (Chao-U)", fontsize=10)
     ax2.grid(alpha=0.3)
     fig.tight_layout()
@@ -169,12 +171,12 @@ def fig3(out="fig3_bins.pdf"):
     ax.bar(x, cs, width=0.55, color=["#9ecae1"] * len(ks),
            edgecolor="#3182bd", lw=0.8)
     ax.axhline(greedy_dc, color="#d62728", lw=1.5, ls="--",
-               label=f"greedy nominal Î”C$_{{end}}$ = {greedy_dc:+.4f}")
+               label=f"greedy nominal \u0394C$_{{end}}$ = {greedy_dc:+.4f}")
     ax.axhline(0, color="#444", lw=0.8)
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
-    ax.set_xlabel("fixed-grid angular bins (8/12/16/24 = 45/30/22.5/15Â° per bin)")
-    ax.set_ylabel("Î”C$_{end}$  (intr $-$ ctrl)")
+    ax.set_xlabel("fixed-grid angular bins (8/12/16/24 = 45/30/22.5/15\u00b0 per bin)")
+    ax.set_ylabel("\u0394C$_{end}$  (intr $-$ ctrl)")
     ax.set_title("Bin-sensitivity of the configuration counter", fontsize=11)
     ax.legend(fontsize=8)
     ax.grid(axis="y", alpha=0.3)
@@ -195,7 +197,7 @@ def fig4(out="fig4_sens.pdf"):
     for f in glob.glob(os.path.join(RES, "campaign_chao8v8/sens_random_ep5_*.json")):
         for r in json.load(open(f)):
             ra.setdefault(r["tag"], []).append(r)
-    klabels = ["k8 (15Â°)", "k6 (30Â°)", "k4 (60Â°)"]
+    klabels = ["k8 (15\u00b0)", "k6 (30\u00b0)", "k4 (60\u00b0)"]
     trained = [np.mean([r[f"seq_loc_k{k}"] for r in ab["intrinsic"]]) for k in (8, 6, 4)]
     random = [np.mean([r[f"seq_loc_k{k}"] for r in ra["random"]]) for k in (8, 6, 4)]
     fig, ax = plt.subplots(figsize=(6.4, 3.6))
@@ -221,6 +223,16 @@ def fig4(out="fig4_sens.pdf"):
 
 
 if __name__ == "__main__":
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--res", default=RES,
+                    help="data root to read (default: <repo>/results; "
+                         "use <repo>/results_digests for the committed subset)")
+    ap.add_argument("--fig", default=FIG,
+                    help="figure output dir (default: <repo>/paper/figures)")
+    args = ap.parse_args()
+    globals()["RES"] = args.res
+    globals()["FIG"] = args.fig
     fig1()
     fig2()
     fig3()

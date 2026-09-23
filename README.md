@@ -1,12 +1,12 @@
-﻿# Project09 â€” MARL Localization-Aware Coverage on MATE (MAPPO + Chao-U)
+﻿# Project09 — MARL Localization-Aware Coverage on MATE (MAPPO + Chao-U)
 
 Successor to **Project08** (grid-world, angular richness). Project09 transposes
 the Chao-U richness signal from per-cell visit counts to **continuous moving
-targets**: the localization unit is the *target*, and every cameraâ†’target
+targets**: the localization unit is the *target*, and every camera→target
 observation contributes a bearing configuration.
 
 **Short thesis framing:** cameras must both cover (track) targets and
-*bearing-localize* them (â‰¥ 2 independent configurations). The raw MATE reward
+*bearing-localize* them (≥ 2 independent configurations). The raw MATE reward
 covers tracking; the Chao-U intrinsic term shapes the remaining-work signal
 `U(t)` so the team learns to resolve under-determined targets.
 
@@ -14,10 +14,10 @@ covers tracking; the Chao-U intrinsic term shapes the remaining-work signal
 
     r = coverage_reward + LAMBDA * (U_t - U_{t+1}) / U_max
 
-- `U` = Chao-U remaining-work estimate over targets (`F1Â²/(2(F2+1))`,
+- `U` = Chao-U remaining-work estimate over targets (`F1²/(2(F2+1))`,
   `bias_cap` variant, capped at #under-determined known targets, floored at 1).
 - `U_max = num_targets`. Positive intrinsic when `U` **decreases**.
-- Targets never observed are excluded from the cap â€” the signal starts flat
+- Targets never observed are excluded from the cap — the signal starts flat
   exactly like Project08's `get_total_undetermined`.
 
 ## Environment stack (locked, reproducible)
@@ -26,7 +26,7 @@ covers tracking; the Chao-U intrinsic term shapes the remaining-work signal
 |---|---|
 | Python | 3.10 (`.venv`) |
 | numpy | 1.26.4 |
-| gym | 0.21.0 (patched sdist â€” see `docs/gym021.md`) |
+| gym | 0.21.0 (patched sdist — see `docs/gym021.md`) |
 | torch | 2.13.0+cpu |
 | MATE | 0.1.0 (git submodule, pin `3e631c0`) |
 
@@ -84,6 +84,23 @@ Known quirks (verified):
         test_mappo.py             Phase 3  MAPPO save-resume + train smoke
         test_heuristics.py        Phase 4  baselines run + obs decoder
 
+## Reproducing the paper tables and figures
+
+`results_digests/` holds the compact (~160 KB) JSON subset behind every number
+in `paper/src/paper.tex`: per-seed `seq_loc` evals for all 4v8/8v8 treatments,
+the sensitivity-control JSONs, and the `results.json` used by the lambda/bin
+sweeps and the saturation claim. `results/` (the full 3.9 GB run archive,
+checkpoints + logs) is git-ignored.
+
+    # 1) every table value (deltas, wins, one-sided p, 90% CI, ratios, C_end)
+    .venv\Scripts\python.exe scripts/analysis/reproduce.py
+
+    # 2) all four paper figures, regenerated from the committed subset only
+    .venv\Scripts\python.exe scripts/figures/fig_paper_planb.py --res results_digests --fig paper/figures
+
+The digest figures are byte-identical (modulo the PDF timestamp) to those
+produced from the full `results/` archive.
+
 ## Resume-Anywhere devops protocol
 
 Every experiment lives in `results/<experiment>/{timestamp}/`:
@@ -94,7 +111,7 @@ Every experiment lives in `results/<experiment>/{timestamp}/`:
     <artifacts>    CSVs, .pt checkpoints, figures
 
 Rerunning the same experiment+timestamp detects `DONE` and prints `[SKIP]`
-(exit 0). Never delete result dirs â€” rename to `*_DISABLED` to retire.
+(exit 0). Never delete result dirs — rename to `*_DISABLED` to retire.
 
 ## Running the gates
 

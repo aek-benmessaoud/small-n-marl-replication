@@ -1,4 +1,4 @@
-﻿"""scripts/fig_forest.py â€” Fig. C (optional): per-seed paired deltas (8v8).
+﻿"""scripts/fig_forest.py — Fig. C (optional): per-seed paired deltas (8v8).
 
 Forest plot of per-seed paired differences (intrinsic - no_intrinsic) for:
   * windowed end-of-episode confidence  C_end(w)  (from eval_final)

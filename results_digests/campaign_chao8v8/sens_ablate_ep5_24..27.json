@@ -1,0 +1,30 @@
+[
+  {
+    "seed": 24,
+    "tag": "intrinsic",
+    "seq_loc_k8": 0.28395,
+    "seq_loc_k6": 0.155525,
+    "seq_loc_k4": 0.052025
+  },
+  {
+    "seed": 25,
+    "tag": "intrinsic",
+    "seq_loc_k8": 0.309825,
+    "seq_loc_k6": 0.221025,
+    "seq_loc_k4": 0.099075
+  },
+  {
+    "seed": 26,
+    "tag": "intrinsic",
+    "seq_loc_k8": 0.270925,
+    "seq_loc_k6": 0.165425,
+    "seq_loc_k4": 0.103575
+  },
+  {
+    "seed": 27,
+    "tag": "intrinsic",
+    "seq_loc_k8": 0.2748,
+    "seq_loc_k6": 0.182,
+    "seq_loc_k4": 0.061825
+  }
+]

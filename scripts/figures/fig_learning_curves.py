@@ -1,4 +1,4 @@
-﻿"""scripts/fig_learning_curves.py â€” Fig. A: training curves for the 8v8 campaign.
+﻿"""scripts/fig_learning_curves.py — Fig. A: training curves for the 8v8 campaign.
 
 Aggregates the per-run `curve` blocks (saved every 10k steps) over the 16
 paired seeds for the intrinsic vs no_intrinsic arms, and plots:

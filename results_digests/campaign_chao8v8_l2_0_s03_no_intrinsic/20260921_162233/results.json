@@ -1,0 +1,47 @@
+{
+  "arm": "no_intrinsic",
+  "env_seed": 3000,
+  "total_steps": 30000,
+  "wall_sec": 1208.89,
+  "steps_per_sec": 24.816,
+  "curve": {
+    "step": [
+      30000
+    ],
+    "eval_return": [
+      -6263.0
+    ],
+    "eval_return_std": [
+      312.654
+    ],
+    "U_end": [
+      1.167
+    ],
+    "C_end": [
+      0.296
+    ],
+    "wall_sec": [
+      1208.89
+    ]
+  },
+  "final_eval": {
+    "returns": [
+      -6163.0,
+      -5940.0,
+      -6686.0
+    ],
+    "U_ends": [
+      1.5,
+      1.0,
+      1.0
+    ],
+    "C_ends": [
+      0.188,
+      0.674,
+      0.025
+    ],
+    "mean_return": -6263.0,
+    "mean_U_end": 1.1666666666666667,
+    "mean_C_end": 0.2956057761476578
+  }
+}

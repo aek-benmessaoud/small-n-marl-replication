@@ -1,5 +1,5 @@
 ﻿@echo off
-REM eval_slow_split.cmd â€” split chao8v8 slow env evals by seed range.
+REM eval_slow_split.cmd — split chao8v8 slow env evals by seed range.
 REM usage: eval_slow_split.cmd <RANGE> <MODE>
 setlocal
 cd /d D:\Unervisity\Project09

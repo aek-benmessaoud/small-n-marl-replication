@@ -1,0 +1,258 @@
+[
+  {
+    "seed": 16,
+    "arm": "loc",
+    "seq_loc": 0.09505,
+    "seq_peak": 0.2,
+    "seq_err": 533.5652364570441,
+    "seq_n": 2426
+  },
+  {
+    "seed": 16,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.074125,
+    "seq_peak": 0.2,
+    "seq_err": 531.2845960439237,
+    "seq_n": 2253
+  },
+  {
+    "seed": 17,
+    "arm": "loc",
+    "seq_loc": 0.08025,
+    "seq_peak": 0.2,
+    "seq_err": 647.6508394427193,
+    "seq_n": 2297
+  },
+  {
+    "seed": 17,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.06665,
+    "seq_peak": 0.2,
+    "seq_err": 529.8284403335008,
+    "seq_n": 1871
+  },
+  {
+    "seed": 18,
+    "arm": "loc",
+    "seq_loc": 0.065425,
+    "seq_peak": 0.2,
+    "seq_err": 649.7205768983968,
+    "seq_n": 1741
+  },
+  {
+    "seed": 18,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.070675,
+    "seq_peak": 0.2,
+    "seq_err": 498.87374173559897,
+    "seq_n": 2156
+  },
+  {
+    "seed": 19,
+    "arm": "loc",
+    "seq_loc": 0.0597,
+    "seq_peak": 0.2,
+    "seq_err": 591.1400504091029,
+    "seq_n": 1779
+  },
+  {
+    "seed": 19,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.070975,
+    "seq_peak": 0.2,
+    "seq_err": 552.76386324455,
+    "seq_n": 2117
+  },
+  {
+    "seed": 20,
+    "arm": "loc",
+    "seq_loc": 0.13025,
+    "seq_peak": 0.2,
+    "seq_err": 426.49100402722286,
+    "seq_n": 3950
+  },
+  {
+    "seed": 20,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.0958,
+    "seq_peak": 0.2,
+    "seq_err": 4405.6012508101885,
+    "seq_n": 2588
+  },
+  {
+    "seed": 21,
+    "arm": "loc",
+    "seq_loc": 0.087275,
+    "seq_peak": 0.2,
+    "seq_err": 532.5275858639624,
+    "seq_n": 2293
+  },
+  {
+    "seed": 21,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.093375,
+    "seq_peak": 0.2,
+    "seq_err": 462.1082543767123,
+    "seq_n": 2499
+  },
+  {
+    "seed": 22,
+    "arm": "loc",
+    "seq_loc": 0.140325,
+    "seq_peak": 0.2,
+    "seq_err": 2337.216404728115,
+    "seq_n": 4281
+  },
+  {
+    "seed": 22,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.105375,
+    "seq_peak": 0.2,
+    "seq_err": 1098.7425202271763,
+    "seq_n": 3292
+  },
+  {
+    "seed": 23,
+    "arm": "loc",
+    "seq_loc": 0.0905,
+    "seq_peak": 0.2,
+    "seq_err": 717.8871321827675,
+    "seq_n": 2449
+  },
+  {
+    "seed": 23,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.0636,
+    "seq_peak": 0.2,
+    "seq_err": 438.55222000269316,
+    "seq_n": 1766
+  },
+  {
+    "seed": 24,
+    "arm": "loc",
+    "seq_loc": 0.096775,
+    "seq_peak": 0.2,
+    "seq_err": 473.08734158517206,
+    "seq_n": 2720
+  },
+  {
+    "seed": 24,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.0658,
+    "seq_peak": 0.2,
+    "seq_err": 497.08776699741617,
+    "seq_n": 2066
+  },
+  {
+    "seed": 25,
+    "arm": "loc",
+    "seq_loc": 0.109325,
+    "seq_peak": 0.2,
+    "seq_err": 574.3580426149178,
+    "seq_n": 3102
+  },
+  {
+    "seed": 25,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.1139,
+    "seq_peak": 0.2,
+    "seq_err": 444.16919487117127,
+    "seq_n": 3162
+  },
+  {
+    "seed": 26,
+    "arm": "loc",
+    "seq_loc": 0.09665,
+    "seq_peak": 0.2,
+    "seq_err": 467.59326328189,
+    "seq_n": 2440
+  },
+  {
+    "seed": 26,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.063125,
+    "seq_peak": 0.2,
+    "seq_err": 497.7408509002299,
+    "seq_n": 1681
+  },
+  {
+    "seed": 27,
+    "arm": "loc",
+    "seq_loc": 0.0741,
+    "seq_peak": 0.2,
+    "seq_err": 421.50918265353585,
+    "seq_n": 1953
+  },
+  {
+    "seed": 27,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.097675,
+    "seq_peak": 0.2,
+    "seq_err": 442.6070827384297,
+    "seq_n": 2815
+  },
+  {
+    "seed": 28,
+    "arm": "loc",
+    "seq_loc": 0.120825,
+    "seq_peak": 0.2,
+    "seq_err": 3050.361258076122,
+    "seq_n": 3619
+  },
+  {
+    "seed": 28,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.112675,
+    "seq_peak": 0.2,
+    "seq_err": 1835.5796862156524,
+    "seq_n": 3332
+  },
+  {
+    "seed": 29,
+    "arm": "loc",
+    "seq_loc": 0.0625,
+    "seq_peak": 0.2,
+    "seq_err": 562.5021605109456,
+    "seq_n": 1821
+  },
+  {
+    "seed": 29,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.063125,
+    "seq_peak": 0.2,
+    "seq_err": 503.9009050790568,
+    "seq_n": 1609
+  },
+  {
+    "seed": 30,
+    "arm": "loc",
+    "seq_loc": 0.118725,
+    "seq_peak": 0.2,
+    "seq_err": 512.034595277719,
+    "seq_n": 3396
+  },
+  {
+    "seed": 30,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.1009,
+    "seq_peak": 0.2,
+    "seq_err": 645.442400234272,
+    "seq_n": 2845
+  },
+  {
+    "seed": 31,
+    "arm": "loc",
+    "seq_loc": 0.094175,
+    "seq_peak": 0.2,
+    "seq_err": 416.7363607159035,
+    "seq_n": 2678
+  },
+  {
+    "seed": 31,
+    "arm": "no_intrinsic",
+    "seq_loc": 0.12025,
+    "seq_peak": 0.2,
+    "seq_err": 6319.105067452034,
+    "seq_n": 2888
+  }
+]

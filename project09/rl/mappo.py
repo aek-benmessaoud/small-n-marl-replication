@@ -14,7 +14,7 @@ import os
 import numpy as np
 import torch
 
-from .models import CentralizedCritic, MLPPolicy
+from .models import CentralizedCritic, MLPPolicy, ObsNormalizer
 
 
 class RolloutBuffer:
@@ -93,8 +93,11 @@ class MAPPO:
         torch.manual_seed(int(rng.integers(0, 2**31 - 1)))
         self.seed = seed
 
-        self.policy = MLPPolicy(obs_dim, act_dim, hidden=hidden)
-        self.critic = CentralizedCritic(n_cam, obs_dim, hidden=hidden)
+        self.obs_normalizer = ObsNormalizer(obs_dim)
+        self.policy = MLPPolicy(obs_dim, act_dim, hidden=hidden,
+                                normalizer=self.obs_normalizer)
+        self.critic = CentralizedCritic(n_cam, obs_dim, hidden=hidden,
+                                        normalizer=self.obs_normalizer)
 
         self.opt = torch.optim.Adam(
             list(self.policy.parameters()) + list(self.critic.parameters()),
@@ -120,6 +123,27 @@ class MAPPO:
         self._buffer.lam = self.lam
 
     # ------------------------------------------------------------------
+    def fit_obs_normalizer(self, env, samples=512, seed=None):
+        """Sample observations with a random policy and fit the per-dimension
+        normalizer (identity until called). Must be consistent across acting,
+        critic and update — it is, because normalization lives in the models."""
+        if self.obs_normalizer.fitted:
+            return self.obs_normalizer
+        rng = np.random.default_rng(seed if seed is not None else self.seed)
+        obs = env.reset()
+        n_cam, obs_dim = obs.shape
+        collected = np.empty((0, obs_dim), dtype=np.float32)
+        done = False
+        steps = 0
+        while len(collected) < samples and not done and steps < samples:
+            actions = rng.uniform(-1.0, 1.0, size=(n_cam, 2))
+            obs_next, _, done, _ = env.step(actions)
+            collected = np.concatenate([collected, obs], axis=0)
+            obs = obs_next
+            steps += 1
+        self.obs_normalizer.fit(collected)
+        return self.obs_normalizer
+
     def act_batch(self, obs, deterministic=False):
         """obs: (n_cam, obs_dim) -> (actions (n_cam, act_dim) clipped to [-1,1],
         joint log-prob (scalar = sum over cameras))."""
@@ -155,18 +179,18 @@ class MAPPO:
                 obs_next, reward, done, info = env.step(actions)
                 ep_ret += reward
                 steps += 1
-                self.step_count += 1
             obs = obs_next
         self.episode_count += 1
         return ep_ret, steps
 
     def collect_rollout(self, env, horizon, max_steps, deterministic=False):
-        """Collect up to `horizon` env steps of transitions into the buffer."""
+        """Collect up to `horizon` env steps of transitions into the buffer
+        (bounded by `max_steps` per episode). One call = one episode."""
         self._buffer.clear()
         obs = env.reset()
         steps = 0
         done = False
-        while steps < horizon:
+        while steps < horizon and steps < max_steps:
             value = self.critic_value(obs)
             actions, logp = self.act_batch(obs, deterministic=False)
             obs_next, reward, done, _ = env.step(actions)
@@ -201,7 +225,8 @@ class MAPPO:
             for i in range(0, n, self.minibatch):
                 ids = idx[i:i + self.minibatch]
                 logp, entropy, _ = self.policy.evaluate_actions(obs[ids], actions[ids])
-                ratio = torch.exp(logp - old_logp[ids])
+                log_ratio = (logp - old_logp[ids]).clamp(-20.0, 20.0)
+                ratio = torch.exp(log_ratio)
                 adv_b = adv[ids]
                 pg1 = -ratio * adv_b
                 pg2 = -torch.clamp(ratio, 1.0 - self.clip, 1.0 + self.clip) * adv_b
@@ -214,9 +239,16 @@ class MAPPO:
                 loss = pg_loss + self.value_coef * vf_loss + self.entropy_coef * entropy_loss
                 self.opt.zero_grad()
                 loss.backward()
-                torch.nn.utils.clip_grad_norm_(
-                    list(self.policy.parameters()) + list(self.critic.parameters()), 0.5
-                )
+                # Clip policy and critic gradients SEPARATELY. A single shared
+                # clip_grad_norm over all params lets the (much larger) value
+                # gradients scale the whole vector down, crushing the policy
+                # gradient ~variance-ratio times and freezing the policy.
+                params = list(self.policy.parameters()) + list(self.critic.parameters())
+                for p in params:
+                    if p.grad is not None and not torch.isfinite(p.grad).all():
+                        p.grad.zero_()
+                torch.nn.utils.clip_grad_norm_(self.policy.parameters(), 0.5)
+                torch.nn.utils.clip_grad_norm_(self.critic.parameters(), 0.5)
                 self.opt.step()
                 total_pg += float(pg_loss.item())
                 total_vf += float(vf_loss.item())
@@ -253,6 +285,8 @@ class MAPPO:
               horizon, eval_env=None, checkpoint_dir=None,
               checkpoint_interval=1000, eval_every=None, resume=None):
         """Train loop with periodic checkpoints and optional best-by-eval ckpt."""
+        if not self.obs_normalizer.fitted:
+            self.fit_obs_normalizer(env)
         if resume and os.path.exists(resume):
             self.load(resume)
             if self.logger:

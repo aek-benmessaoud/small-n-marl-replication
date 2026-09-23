@@ -62,6 +62,8 @@ def per_target_bounds(camera_xy, target_xy, view_mask, sigma_deg=None):
     view_mask : (n_cam, n_tar) bool — which cameras see which targets.
     Returns (n_tar,) float array (+inf for unobserved/under-determined).
     """
+    if sigma_deg is None:
+        sigma_deg = QUALITY_SIGMA_BEARING_DEG
     view_mask = np.asarray(view_mask, dtype=bool)
     n_tar = target_xy.shape[0]
     bounds = np.full(n_tar, np.inf, dtype=np.float64)

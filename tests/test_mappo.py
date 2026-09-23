@@ -86,3 +86,40 @@ def test_mappo_update_finite():
     pg, vf = mappo.update(buffer)
     assert np.isfinite(pg) and np.isfinite(vf)
     env.close()
+
+
+def test_obs_normalizer_fit():
+    """fit_obs_normalizer must produce per-dim stats and keep acting finite."""
+    env = _make_env()
+    obs = env.reset()
+    n_cam, obs_dim = obs.shape
+    mappo = MAPPO(obs_dim=obs_dim, act_dim=2, n_cam=n_cam, seed=0)
+    norm = mappo.fit_obs_normalizer(env, samples=64, seed=0)
+    assert norm.fitted
+    assert np.all(np.isfinite(norm.std.cpu().numpy()))
+    assert np.all(norm.std.cpu().numpy() > 0)
+    a, _ = mappo.act_batch(obs)
+    assert np.all(np.isfinite(a))
+    env.close()
+
+
+def test_mappo_stability_no_nan():
+    """Regression: normalized obs must keep training finite (previous run
+    diverged to NaN at ~13k steps with raw obs)."""
+    env = _make_env()
+    obs = env.reset()
+    n_cam, obs_dim = obs.shape
+    mappo = MAPPO(obs_dim=obs_dim, act_dim=2, n_cam=n_cam, seed=0,
+                  minibatch=16, epochs=2)
+    mappo.fit_obs_normalizer(env, samples=128, seed=0)
+    steps = 0
+    while steps < 800:
+        buffer = mappo.collect_rollout(env, horizon=100, max_steps=100)
+        mappo.update(buffer)
+        steps += len(buffer[0])
+        assert np.all(np.isfinite(
+            mappo.policy.log_std.detach().cpu().numpy())), "policy log_std NaN"
+        for name, p in mappo.policy.named_parameters():
+            assert np.all(np.isfinite(p.detach().cpu().numpy())), \
+                f"policy param {name} NaN"
+    env.close()

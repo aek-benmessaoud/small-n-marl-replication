@@ -39,3 +39,19 @@ Thumbs.db
 # Editors
 .vscode/
 .idea/
+
+# Paper build artifacts
+*.aux
+*.log
+*.out
+*.cls
+paper*.pdf
+paper*.tex
+pdflatex.err
+pdflatex.out
+recompile.log
+orphan.log
+
+# Local scratch
+bitset.zip
+bitset_tmp/

@@ -120,3 +120,75 @@ def test_u_decreases_when_configuration_added():
     U_after = tracker.U(variant="bias_cap")
     # target 0 now has two independent bearings -> under-determined set shrinks
     assert U_after <= U_before
+
+
+def test_windowed_tracker_evicts_old_bearings():
+    """window=N keeps only bearings from the last N observe() calls; older
+    ones are evicted so the configuration count can drop again."""
+    camera_xy = np.array([[0.0, 0.0], [100.0, 0.0]])
+    target_xy = np.array([[50.0, 1.0]])
+    cam = np.array([[True]], dtype=bool)
+
+    tracker = TargetTracker(num_targets=1, window=3)
+    # step 0: only cam1 sees the target -> one configuration (bearing ~179 deg)
+    tracker.observe(camera_xy[1:], target_xy, cam)
+    assert len(tracker.buffers[0]) == 1
+    # step 1: cam0 also sees it -> second, well-separated configuration
+    tracker.observe(camera_xy[:1], target_xy, cam)
+    assert tracker.config_count(0) == 2
+    assert len(tracker.buffers[0]) == 2
+    # steps 2,3: cam0 only; after step 3 the step-0 bearing (cam1) is evicted
+    tracker.observe(camera_xy[:1], target_xy, cam)
+    assert len(tracker.buffers[0]) == 3
+    tracker.observe(camera_xy[:1], target_xy, cam)
+    assert len(tracker.buffers[0]) == 3  # window kept, oldest dropped
+    assert tracker.config_count(0) == 1  # second config was evicted
+
+
+def test_windowed_u_rises_again_after_eviction():
+    """Windowed richness is SHORT-TIMESCALE: U drops when a configuration is
+    gained, then RISES back when the window slides past it — the episode-
+    cumulative model never forgets, the windowed one does."""
+    camera_xy = np.array([[0.0, 0.0], [100.0, 0.0]])
+    target_xy = np.array([[50.0, 1.0], [50.0, 60.0], [10.0, 90.0]])
+    cam0 = np.array([[1, 1, 1],
+                     [0, 0, 0]], dtype=bool)   # only cam0 sees all targets
+    cam0_and_cam1 = np.array([[1, 1, 1],
+                              [1, 0, 0]], dtype=bool)  # cam1 also sees t0
+
+    tracker = TargetTracker(num_targets=3, window=2)
+    # step 0: all 3 targets, 1 configuration each -> F1=3, U=3.0
+    tracker.observe(camera_xy, target_xy, cam0)
+    U_early = tracker.U(variant="bias_cap")
+    # step 1: t0 gains a 2nd, well-separated configuration -> F2=1, U drops
+    tracker.observe(camera_xy, target_xy, cam0_and_cam1)
+    U_mid = tracker.U(variant="bias_cap")
+    assert U_mid < U_early
+    # steps 2,3: cam0 only; at step 3 (window=2) the step-1 cam1 bearing is
+    # evicted and t0 is back to 1 configuration -> U rises again
+    tracker.observe(camera_xy, target_xy, cam0)
+    tracker.observe(camera_xy, target_xy, cam0)
+    U_late = tracker.U(variant="bias_cap")
+    assert tracker.config_count(0) == 1
+    assert U_late > U_mid
+
+
+def test_n_bins_counts_occupied_bins():
+    """n_bins discretizes the circle; config_count = number of DISTINCT
+    occupied bins (roadmap step 6, bin-sensitivity knob)."""
+    tracker = TargetTracker(num_targets=1, n_bins=8)
+    # bin width 45 deg. bearings 0/15 -> same bin; 45 -> next; 90 -> next.
+    for deg in (0.0, 15.0, 45.0, 90.0):
+        tracker.buffers[0].append(np.deg2rad(deg))
+    assert tracker.config_count(0) == 3
+    assert tracker.visit()[0] == 3.0
+
+    # same bearings under greedy clustering: 0 and 15 deg within ANG_TOL_DEG
+    # (15 deg -> NOT separated) so greedy gives 3; bins with 8 bins also 3.
+    t24 = TargetTracker(num_targets=1, n_bins=24)
+    for deg in (0.0, 15.0):
+        t24.buffers[0].append(np.deg2rad(deg))
+    assert t24.config_count(0) == 2  # 24 bins -> 15 deg/bin -> two bins
+
+    t_empty = TargetTracker(num_targets=1, n_bins=8)
+    assert t_empty.config_count(0) == 0  # never seen -> 0 configurations

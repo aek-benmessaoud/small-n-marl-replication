@@ -1,4 +1,4 @@
-"""
+﻿"""
 tests/test_mappo.py — Phase 3 gate: MAPPO save/resume + smoke train.
 
 Short training on MATE-4v2-9-v0 (4 cameras, 2 targets) verifying the
@@ -12,10 +12,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import numpy as np
 
-from project09.config import REWARD_LAMBDA
-from project09.environment.mate_env import make_mate
-from project09.environment.reward import ChaoUReward
-from project09.rl.mappo import MAPPO
+from src.config import REWARD_LAMBDA
+from src.environment.mate_env import make_mate
+from src.environment.reward import ChaoUReward
+from src.rl.mappo import MAPPO
 
 
 def _make_env(seed=0):

@@ -1,4 +1,4 @@
-"""
+﻿"""
 tests/test_heuristics.py — Phase 4 gate: heuristic baselines run end-to-end
 and produce U metrics under the Chao-U reward wrapper.
 
@@ -12,11 +12,11 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import numpy as np
 
-from project09.config import REWARD_LAMBDA
-from project09.environment.mate_env import make_mate, num_entities, state_arrays
-from project09.environment.reward import ChaoUReward
-from project09.rl.decode import decode_team_obs
-from project09.rl.heuristics import (
+from src.config import REWARD_LAMBDA
+from src.environment.mate_env import make_mate, num_entities, state_arrays
+from src.environment.reward import ChaoUReward
+from src.rl.decode import decode_team_obs
+from src.rl.heuristics import (
     ChaoUAwarePolicy, GreedyTrackingPolicy, RandomCameraPolicy,
     TeamMemoryTrackingPolicy,
 )

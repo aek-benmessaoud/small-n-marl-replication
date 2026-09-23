@@ -1,4 +1,4 @@
-"""
+﻿"""
 tests/test_devops.py — Resume-Anywhere protocol gate: golden trio, DONE
 marker, [SKIP] on rerun, config.json with git hash written BEFORE the run.
 """
@@ -11,8 +11,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pytest
 
-from project09.config import DONE_MARKER
-from project09.devops.runner import ExperimentRunner
+from src.config import DONE_MARKER
+from src.devops.runner import ExperimentRunner
 
 
 BASE_CONFIG = {
@@ -28,7 +28,7 @@ BASE_CONFIG = {
 
 
 def test_runner_writes_golden_trio(tmp_path, monkeypatch):
-    monkeypatch.setattr("project09.utils.paths.RESULTS_DIR", str(tmp_path))
+    monkeypatch.setattr("src.utils.paths.RESULTS_DIR", str(tmp_path))
     runner = ExperimentRunner(experiment="golden", phase=1,
                               timestamp="20260101_000000", config=BASE_CONFIG)
     assert runner.begin() is True
@@ -49,7 +49,7 @@ def test_runner_writes_golden_trio(tmp_path, monkeypatch):
 
 
 def test_rerun_skips_when_done(tmp_path, monkeypatch):
-    monkeypatch.setattr("project09.utils.paths.RESULTS_DIR", str(tmp_path))
+    monkeypatch.setattr("src.utils.paths.RESULTS_DIR", str(tmp_path))
     runner = ExperimentRunner(experiment="golden", phase=1,
                               timestamp="20260101_000000", config=BASE_CONFIG)
     runner.begin()
@@ -61,7 +61,7 @@ def test_rerun_skips_when_done(tmp_path, monkeypatch):
 
 
 def test_runner_rejects_missing_config_keys(tmp_path, monkeypatch):
-    monkeypatch.setattr("project09.utils.paths.RESULTS_DIR", str(tmp_path))
+    monkeypatch.setattr("src.utils.paths.RESULTS_DIR", str(tmp_path))
     runner = ExperimentRunner(experiment="bad", phase=0,
                               timestamp="20260101_000000",
                               config={"experiment": "bad"})
@@ -70,8 +70,8 @@ def test_runner_rejects_missing_config_keys(tmp_path, monkeypatch):
 
 
 def test_done_marker_only_on_success(tmp_path, monkeypatch, capsys):
-    monkeypatch.setattr("project09.utils.paths.RESULTS_DIR", str(tmp_path))
-    from project09.devops.runner import RunContext
+    monkeypatch.setattr("src.utils.paths.RESULTS_DIR", str(tmp_path))
+    from src.devops.runner import RunContext
     ctx = RunContext(experiment="ctx", phase=0, timestamp="20260101_000000",
                      config=BASE_CONFIG)
     try:

@@ -1,4 +1,4 @@
-"""
+﻿"""
 tests/test_rewards.py — Phase 2 gate: Chao-U intrinsic reward sign/shape.
 
 Locked convention: r_intrinsic = lambda * (U_t - U_{t+1}) / U_max.
@@ -15,15 +15,15 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import numpy as np
 
-from project09.config import REWARD_LAMBDA
-from project09.environment.mate_env import make_mate, state_arrays
-from project09.environment.reward import (
+from src.config import REWARD_LAMBDA
+from src.environment.mate_env import make_mate, state_arrays
+from src.environment.reward import (
     ChaoUReward, LocalizationReward, RNDIntrinsic, UTracker, measure_loc_scale,
     measure_reward_scale, measure_rnd_scale, rnd_pose_state, suggest_lambda,
     suggest_loc_lambda, suggest_rnd_lambda,
 )
-from project09.estimators.continuous import TargetTracker
-from project09.rl.rnd import RND
+from src.estimators.continuous import TargetTracker
+from src.rl.rnd import RND
 
 
 def test_reward_zero_when_U_stable():

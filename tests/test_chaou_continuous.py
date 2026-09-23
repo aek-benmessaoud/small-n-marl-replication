@@ -1,4 +1,4 @@
-"""
+﻿"""
 tests/test_chaou_continuous.py — Phase 1 gate: the continuous target-centric
 Chao-U signal must equal the grid-cell Chao-U signal when target positions are
 snapped to grid centers.
@@ -16,10 +16,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import numpy as np
 
-from project09.config import ANG_TOL_DEG, CLUSTER_CAP
-from project09.estimators.angular import greedy_cluster_centers
-from project09.estimators.continuous import TargetTracker
-from project09.estimators.richness import chao_u, chao_u_components
+from src.config import ANG_TOL_DEG, CLUSTER_CAP
+from src.estimators.angular import greedy_cluster_centers
+from src.estimators.continuous import TargetTracker
+from src.estimators.richness import chao_u, chao_u_components
 
 
 def _grid_bundle(cells, observers, fov_radius):
